@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "ProducerConsumer.h"
+
 int main() {
 	using std::cout;
 	using std::cin;
