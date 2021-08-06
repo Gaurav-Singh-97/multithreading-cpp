@@ -33,7 +33,7 @@ Consumer<T>::Consumer()
 {
 	std::lock_guard<std::mutex> counterLock(counterMutex);
 	++counter;
-	_id = std::string("consumer") + std::to_string(counter);
+	this->_id = std::string("consumer") + std::to_string(counter);
 	std::cout << "Consumer constructed with id : " << this->_id << "\n";
 }
 

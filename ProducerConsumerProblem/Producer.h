@@ -33,7 +33,7 @@ Producer<T>::Producer()
 {
 	std::lock_guard<std::mutex> counterLock(counterMutex);
 	++counter;
-	_id = std::string("producer") + std::to_string(counter);
+	this->_id = std::string("producer") + std::to_string(counter);
 	std::cout << "Producer constructed with id : " << this->_id << "\n";
 }
 
