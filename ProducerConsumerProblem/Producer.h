@@ -9,8 +9,6 @@ class Producer {
 private:
 	std::string _id;	// should be unique across in whole application, not just among all producers
 
-	std::string generateId();
-
 	T produce();
 
 	static int counter;
@@ -26,8 +24,10 @@ template <typename T>
 int Producer<T>::counter = 0;
 
 template <class T>
-Producer<T>::Producer() : _id(generateId())
+Producer<T>::Producer()
 {
+	++counter;
+	_id = std::string("producer") + std::to_string(counter);
 	std::cout << "Producer constructed with id : " << _id << "\n";
 }
 
@@ -35,13 +35,7 @@ template <class T>
 Producer<T>::~Producer()
 {
 	std::cout << "Producer destructed with id : " << _id << "\n";
-}
-
-template <class T>
-std::string Producer<T>::generateId()
-{
-	++counter;
-	return std::string("producer") + std::to_string(counter);
+	--counter;
 }
 
 template <class T>
