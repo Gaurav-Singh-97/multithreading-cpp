@@ -28,13 +28,13 @@ Consumer<T>::Consumer()
 {
 	++counter;
 	_id = std::string("consumer") + std::to_string(counter);
-	std::cout << "Consumer constructed with id : " << _id << "\n";
+	std::cout << "Consumer constructed with id : " << this->_id << "\n";
 }
 
 template <class T>
 Consumer<T>::~Consumer()
 {
-	std::cout << "Consumer destructed with id : " << _id << "\n";
+	std::cout << "Consumer destructed with id : " << this->_id << "\n";
 	--counter;
 }
 

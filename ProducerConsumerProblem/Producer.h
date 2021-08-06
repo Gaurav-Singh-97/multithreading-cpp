@@ -28,13 +28,13 @@ Producer<T>::Producer()
 {
 	++counter;
 	_id = std::string("producer") + std::to_string(counter);
-	std::cout << "Producer constructed with id : " << _id << "\n";
+	std::cout << "Producer constructed with id : " << this->_id << "\n";
 }
 
 template <class T>
 Producer<T>::~Producer()
 {
-	std::cout << "Producer destructed with id : " << _id << "\n";
+	std::cout << "Producer destructed with id : " << this->_id << "\n";
 	--counter;
 }
 
