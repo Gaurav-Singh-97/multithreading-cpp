@@ -2,17 +2,20 @@
 #define CONSUMER_H
 
 #include <string>
+#include <queue>
 
 class Consumer {
 private:
 	std::string _id;	// should be unique across in whole application, not just among all consumers
 
-private:
-	static std::string generateId();
+	std::string generateId();
 
-	Consumer() : _id(generateId())
-	{
-	}
+	void consume();
+
+public:
+	Consumer();
+
+	void removeFromBuffer(std::queue<int>& );
 };
 
 #endif
