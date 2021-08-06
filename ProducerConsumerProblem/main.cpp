@@ -20,7 +20,7 @@ int main() {
 	cin >> consumerCount;
 
 	try {
-		ProducerConsumerImpl(producerCount, consumerCount);
+		ProducerConsumerImpl<int> producerConsumerImpl(producerCount, consumerCount);
 	}
 	catch(...) {
 		cout << "Some exception occurred in ProducerConsumerImpl\n";
