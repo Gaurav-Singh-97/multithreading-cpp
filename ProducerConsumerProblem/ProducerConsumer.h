@@ -16,6 +16,7 @@ private:
 	std::queue<T> buffer;
 public:
 	ProducerConsumerImpl(int, int);
+	void run();
 };
 
 template <typename T>
@@ -26,6 +27,20 @@ producers(producerCount),
 consumers(consumerCount)
 {
 	// TODO: Create consumers and producers respectively with given numbers
+}
+
+template <typename T>
+void ProducerConsumerImpl<T>::run()
+{
+	for (auto producer : this->producers)
+	{
+		producer.start();
+	}
+
+	for (auto consumer : this->consumers)
+	{
+		consumer.start();
+	}
 }
 
 #endif	// __PRODUCER_CONSUMER_H__
