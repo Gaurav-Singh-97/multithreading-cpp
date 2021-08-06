@@ -3,6 +3,7 @@
 
 #include <string>
 #include <queue>
+#include <mutex>
 
 template <class T>
 class Producer {
@@ -12,6 +13,7 @@ private:
 	T produce();
 
 	static int counter;
+	static std::mutex counterMutex;
 
 public:
 	Producer();
@@ -23,9 +25,13 @@ public:
 template <typename T>
 int Producer<T>::counter = 0;
 
+template <typename T>
+std::mutex Producer<T>::counterMutex;
+
 template <class T>
 Producer<T>::Producer()
 {
+	std::lock_guard<std::mutex> counterLock(counterMutex);
 	++counter;
 	_id = std::string("producer") + std::to_string(counter);
 	std::cout << "Producer constructed with id : " << this->_id << "\n";
@@ -35,6 +41,7 @@ template <class T>
 Producer<T>::~Producer()
 {
 	std::cout << "Producer destructed with id : " << this->_id << "\n";
+	std::lock_guard<std::mutex> counterLock(counterMutex);
 	--counter;
 }
 
