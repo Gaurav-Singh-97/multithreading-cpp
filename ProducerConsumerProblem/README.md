@@ -1,7 +1,19 @@
 # Producer Consumer Problem
 
+Prerequisites :
+```
+g++
+cmake
+make
+```
+
 Build :
-`g++ main.cpp ProducerConsumer.cpp Producer.cpp Consumer.cpp -o main -std=c++11`
+```
+mkdir build
+cd build
+cmake ..
+make
+```
 
 Run :
-`./main`
+`./producerconsumer`
