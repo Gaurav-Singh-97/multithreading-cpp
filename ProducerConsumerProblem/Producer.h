@@ -13,21 +13,35 @@ private:
 
 	T produce();
 
+	static int counter;
+
 public:
 	Producer();
+	~Producer();
 
 	void addToBuffer(std::queue<int>& );
 };
 
+template <typename T>
+int Producer<T>::counter = 0;
+
 template <class T>
 Producer<T>::Producer() : _id(generateId())
 {
+	std::cout << "Producer constructed with id : " << _id << "\n";
+}
+
+template <class T>
+Producer<T>::~Producer()
+{
+	std::cout << "Producer destructed with id : " << _id << "\n";
 }
 
 template <class T>
 std::string Producer<T>::generateId()
 {
-	return std::string();
+	++counter;
+	return std::string("producer") + std::to_string(counter);
 }
 
 template <class T>

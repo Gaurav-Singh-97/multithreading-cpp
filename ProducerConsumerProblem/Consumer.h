@@ -13,21 +13,35 @@ private:
 
 	void consume(const T& );
 
+	static int counter;
+
 public:
 	Consumer();
+	~Consumer();
 
 	void removeFromBuffer(std::queue<int>& );
 };
 
+template <typename T>
+int Consumer<T>::counter = 0;
+
 template <class T>
 Consumer<T>::Consumer() : _id(generateId())
 {
+	std::cout << "Consumer constructed with id : " << _id << "\n";
+}
+
+template <class T>
+Consumer<T>::~Consumer()
+{
+	std::cout << "Consumer destructed with id : " << _id << "\n";
 }
 
 template <class T>
 std::string Consumer<T>::generateId()
 {
-	return std::string();
+	++counter;
+	return std::string("consumer") + std::to_string(counter);
 }
 
 template <class T>
