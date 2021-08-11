@@ -15,11 +15,13 @@ private:
 	static int counter;
 	static std::mutex counterMutex;
 
+	void removeFromBuffer(std::queue<int>& );
+
 public:
 	Consumer();
 	~Consumer();
 
-	void removeFromBuffer(std::queue<int>& );
+	void run();
 };
 
 template <typename T>
@@ -31,9 +33,11 @@ std::mutex Consumer<T>::counterMutex;
 template <class T>
 Consumer<T>::Consumer()
 {
-	std::lock_guard<std::mutex> counterLock(counterMutex);
-	++counter;
-	this->_id = std::string("consumer") + std::to_string(counter);
+	{
+		//std::lock_guard<std::mutex> counterLock(counterMutex);
+		++counter;
+	}
+	this->_id = std::string("c") + std::to_string(counter);
 	std::cout << "Consumer constructed with id : " << this->_id << "\n";
 }
 
@@ -41,7 +45,7 @@ template <class T>
 Consumer<T>::~Consumer()
 {
 	std::cout << "Consumer destructed with id : " << this->_id << "\n";
-	std::lock_guard<std::mutex> counterLock(counterMutex);
+	//std::lock_guard<std::mutex> counterLock(counterMutex);
 	--counter;
 }
 
@@ -51,6 +55,12 @@ void Consumer<T>::removeFromBuffer(std::queue<int>& buffer)
 	auto objRemoved = buffer.front();
 	buffer.pop();
 	//std::cout << "Object removed from buffer " << objRemoved.description() << "\n";
+}
+
+template <typename T>
+void Consumer<T>::run()
+{
+
 }
 
 #endif

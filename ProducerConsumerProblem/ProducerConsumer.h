@@ -9,6 +9,7 @@
 
 template <typename T>
 class ProducerConsumerImpl {
+	//TODO: make it singleton pattern
 private:
 	int _producerCount, _consumerCount;
 	std::vector<Producer<T> > 	producers;
@@ -16,6 +17,7 @@ private:
 	std::queue<T> buffer;
 public:
 	ProducerConsumerImpl(int, int);
+	~ProducerConsumerImpl();
 	void run();
 };
 
@@ -27,19 +29,28 @@ producers(producerCount),
 consumers(consumerCount)
 {
 	// TODO: Create consumers and producers respectively with given numbers
+	std::cout << "ProducerConsumerImpl ctor\n";
+}
+
+template <typename T>
+ProducerConsumerImpl<T>::~ProducerConsumerImpl()
+{
+	std::cout << "ProducerConsumerImpl dtor\n";
 }
 
 template <typename T>
 void ProducerConsumerImpl<T>::run()
 {
-	for (auto producer : this->producers)
+	//std::cout << "producers.size() : " << producers.size() << "\n";
+	for (auto& producer : this->producers)
 	{
-		producer.start();
+		producer.run();
 	}
 
-	for (auto consumer : this->consumers)
+	//std::cout << "consumers.size() : " << consumers.size() << "\n";
+	for (auto& consumer : this->consumers)
 	{
-		consumer.start();
+		consumer.run();
 	}
 }
 

@@ -15,11 +15,13 @@ private:
 	static int counter;
 	static std::mutex counterMutex;
 
+	void addToBuffer(std::queue<int>& );
+
 public:
 	Producer();
 	~Producer();
 
-	void addToBuffer(std::queue<int>& );
+	void run();
 };
 
 template <typename T>
@@ -31,9 +33,11 @@ std::mutex Producer<T>::counterMutex;
 template <class T>
 Producer<T>::Producer()
 {
-	std::lock_guard<std::mutex> counterLock(counterMutex);
-	++counter;
-	this->_id = std::string("producer") + std::to_string(counter);
+	{
+		//std::lock_guard<std::mutex> counterLock(counterMutex);
+		++counter;
+	}
+	this->_id = std::string("p") + std::to_string(counter);
 	std::cout << "Producer constructed with id : " << this->_id << "\n";
 }
 
@@ -41,7 +45,7 @@ template <class T>
 Producer<T>::~Producer()
 {
 	std::cout << "Producer destructed with id : " << this->_id << "\n";
-	std::lock_guard<std::mutex> counterLock(counterMutex);
+	//std::lock_guard<std::mutex> counterLock(counterMutex);
 	--counter;
 }
 
@@ -51,6 +55,12 @@ void Producer<T>::addToBuffer(std::queue<int>& buffer)
 	auto objToAdd = produce();
 	buffer.push(objToAdd);
 	//std::cout << "Object added to buffer " << objToAdd.description() << "\n";
+}
+
+template <typename T>
+void Producer<T>::run()
+{
+
 }
 
 #endif

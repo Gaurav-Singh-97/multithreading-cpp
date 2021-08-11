@@ -21,6 +21,10 @@ int main() {
 
 	try {
 		ProducerConsumerImpl<int> producerConsumerImpl(producerCount, consumerCount);
+		//TODO: make a wrapper around template type,
+		//      so that any type (whether primitive or user defined) can have certain functions like to_string() ;
+		//      or ensure it using some other way
+		producerConsumerImpl.run();
 	}
 	catch(...) {
 		cout << "Some exception occurred in ProducerConsumerImpl\n";
