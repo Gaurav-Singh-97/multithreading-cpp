@@ -6,7 +6,8 @@
 #include <mutex>
 
 template <class T>
-class Producer {
+class Producer
+{
 private:
 	std::string _id;	// should be unique across in whole application, not just among all producers
 

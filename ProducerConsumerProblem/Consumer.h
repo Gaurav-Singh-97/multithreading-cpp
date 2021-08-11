@@ -6,7 +6,8 @@
 #include <mutex>
 
 template <class T>
-class Consumer {
+class Consumer
+{
 private:
 	std::string _id;	// should be unique across in whole application, not just among all consumers
 
