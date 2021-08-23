@@ -4,12 +4,14 @@
 #include <string>
 #include <queue>
 #include <mutex>
+#include <thread>
 
 template <class T>
 class Consumer
 {
 private:
 	std::string _id;	// should be unique across in whole application, not just among all consumers
+	std::thread workerThread;
 
 	void consume(const T& );
 
@@ -17,6 +19,8 @@ private:
 	static std::mutex counterMutex;
 
 	void removeFromBuffer(std::queue<int>& );
+
+	static void worker();
 
 public:
 	Consumer();
@@ -45,6 +49,10 @@ Consumer<T>::Consumer()
 template <class T>
 Consumer<T>::~Consumer()
 {
+	if (this->workerThread.joinable())
+	{
+		this->workerThread.join();
+	}
 	std::cout << "Consumer destructed with id : " << this->_id << "\n";
 	//std::lock_guard<std::mutex> counterLock(counterMutex);
 	--counter;
@@ -60,6 +68,17 @@ void Consumer<T>::removeFromBuffer(std::queue<int>& buffer)
 
 template <typename T>
 void Consumer<T>::run()
+{
+	std::cout << "Consumer<T>::run() called for id : " << this->_id << std::endl;
+	if (this->workerThread.joinable())
+	{
+		this->workerThread.join();
+	}
+	this->workerThread = std::thread(Consumer<T>::worker);
+}
+
+template <typename T>
+void Consumer<T>::worker()
 {
 
 }

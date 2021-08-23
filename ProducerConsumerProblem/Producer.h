@@ -4,12 +4,14 @@
 #include <string>
 #include <queue>
 #include <mutex>
+#include <thread>
 
 template <class T>
 class Producer
 {
 private:
 	std::string _id;	// should be unique across in whole application, not just among all producers
+	std::thread workerThread;
 
 	T produce();
 
@@ -17,6 +19,8 @@ private:
 	static std::mutex counterMutex;
 
 	void addToBuffer(std::queue<int>& );
+
+	static void worker();
 
 public:
 	Producer();
@@ -45,6 +49,10 @@ Producer<T>::Producer()
 template <class T>
 Producer<T>::~Producer()
 {
+	if (this->workerThread.joinable())
+	{
+		this->workerThread.join();
+	}
 	std::cout << "Producer destructed with id : " << this->_id << "\n";
 	//std::lock_guard<std::mutex> counterLock(counterMutex);
 	--counter;
@@ -60,6 +68,17 @@ void Producer<T>::addToBuffer(std::queue<int>& buffer)
 
 template <typename T>
 void Producer<T>::run()
+{
+	std::cout << "Producer<T>::run() called for id : " << this->_id << std::endl;
+	if (this->workerThread.joinable())
+	{
+		this->workerThread.join();
+	}
+	this->workerThread = std::thread(Producer<T>::worker);
+}
+
+template <typename T>
+void Producer<T>::worker()
 {
 
 }
