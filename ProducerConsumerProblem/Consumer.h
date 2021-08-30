@@ -6,6 +6,8 @@
 #include <mutex>
 #include <thread>
 
+extern bool gStopSignalled;
+
 template <class T>
 class Consumer
 {
@@ -20,7 +22,7 @@ private:
 
 	void removeFromBuffer(std::queue<int>& );
 
-	static void worker();
+	void worker();
 
 public:
 	Consumer();
@@ -74,13 +76,18 @@ void Consumer<T>::run()
 	{
 		this->workerThread.join();
 	}
-	this->workerThread = std::thread(Consumer<T>::worker);
+	this->workerThread = std::thread(&Consumer<T>::worker, this);
 }
 
 template <typename T>
 void Consumer<T>::worker()
 {
-
+	std::cout << this->_id << " worker started" << std::endl;
+	while (!gStopSignalled)
+	{
+		std::cout << this->_id << " worker running" << std::endl;
+	}
+	std::cout << this->_id << " worker finished" << std::endl;
 }
 
 #endif

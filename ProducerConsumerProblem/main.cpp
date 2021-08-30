@@ -7,6 +7,8 @@
 
 #include "ProducerConsumer.h"
 
+bool gStopSignalled = false;
+
 int main() {
 	using std::cout;
 	using std::cin;
@@ -25,6 +27,11 @@ int main() {
 		//      so that any type (whether primitive or user defined) can have certain functions like to_string() ;
 		//      or ensure it using some other way
 		producerConsumerImpl.run();
+
+		// test block begin
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		gStopSignalled = true;
+		// test block end
 	}
 	catch(...) {
 		cout << "Some exception occurred in ProducerConsumerImpl\n";

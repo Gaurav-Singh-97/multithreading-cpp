@@ -42,15 +42,18 @@ template <typename T>
 void ProducerConsumerImpl<T>::run()
 {
 	//std::cout << "producers.size() : " << producers.size() << "\n";
-	for (auto& producer : this->producers)
+	if (!gStopSignalled)
 	{
-		producer.run();
-	}
+		for (auto& producer : this->producers)
+		{
+			producer.run();
+		}
 
-	//std::cout << "consumers.size() : " << consumers.size() << "\n";
-	for (auto& consumer : this->consumers)
-	{
-		consumer.run();
+		//std::cout << "consumers.size() : " << consumers.size() << "\n";
+		for (auto& consumer : this->consumers)
+		{
+			consumer.run();
+		}
 	}
 }
 
