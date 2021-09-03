@@ -28,10 +28,12 @@ int main() {
 		//      or ensure it using some other way
 		producerConsumerImpl.run();
 
+/*
 		// test block begin
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 		gStopSignalled = true;
 		// test block end
+*/
 	}
 	catch(...) {
 		cout << "Some exception occurred in ProducerConsumerImpl\n";

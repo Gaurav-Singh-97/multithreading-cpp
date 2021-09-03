@@ -36,6 +36,10 @@ template <typename T>
 ProducerConsumerImpl<T>::~ProducerConsumerImpl()
 {
 	std::cout << "ProducerConsumerImpl dtor\n";
+	gStopSignalled = true;
+	int sleepDuration = 2;	// unit = seconds, duration arbitrary
+	std::cout << "~ProducerConsumerImpl: Waiting for " << sleepDuration << " seconds\n";
+	std::this_thread::sleep_for(std::chrono::seconds(sleepDuration));
 }
 
 template <typename T>
