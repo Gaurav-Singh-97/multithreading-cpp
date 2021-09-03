@@ -8,6 +8,7 @@
 #include "ProducerConsumer.h"
 
 bool gStopSignalled = false;
+// TODO: avoid global variable, find better alternative
 
 int main() {
 	using std::cout;
