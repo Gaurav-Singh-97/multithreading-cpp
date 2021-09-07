@@ -22,13 +22,13 @@ private:
 
 	void removeFromBuffer(std::queue<int>& );
 
-	void worker();
+	void worker(std::weak_ptr<std::queue<T> > );
 
 public:
 	Consumer();
 	~Consumer();
 
-	void run();
+	void run(std::weak_ptr<std::queue<T> > );
 };
 
 template <typename T>
@@ -69,23 +69,27 @@ void Consumer<T>::removeFromBuffer(std::queue<int>& buffer)
 }
 
 template <typename T>
-void Consumer<T>::run()
+void Consumer<T>::run(std::weak_ptr<std::queue<T> > bufferPtr)
 {
 	std::cout << "Consumer<T>::run() called for id : " << this->_id << std::endl;
 	if (this->workerThread.joinable())
 	{
 		this->workerThread.join();
 	}
-	this->workerThread = std::thread(&Consumer<T>::worker, this);
+	this->workerThread = std::thread(&Consumer<T>::worker, this, bufferPtr);
 }
 
 template <typename T>
-void Consumer<T>::worker()
+void Consumer<T>::worker(std::weak_ptr<std::queue<T> > bufferPtr)
 {
 	std::cout << this->_id << " worker started" << std::endl;
 	while (!gStopSignalled)
 	{
 		std::cout << this->_id << " worker running" << std::endl;
+		if (auto srcBufferPtr = bufferPtr.lock())
+		{
+			std::cout << "src buffer size = " << srcBufferPtr->size() << std::endl;
+		}
 	}
 	std::cout << this->_id << " worker finished" << std::endl;
 }

@@ -22,13 +22,13 @@ private:
 
 	void addToBuffer(std::queue<int>& );
 
-	void worker();
+	void worker(std::weak_ptr<std::queue<T> > );
 
 public:
 	Producer();
 	~Producer();
 
-	void run();
+	void run(std::weak_ptr<std::queue<T> > );
 };
 
 template <typename T>
@@ -69,23 +69,27 @@ void Producer<T>::addToBuffer(std::queue<int>& buffer)
 }
 
 template <typename T>
-void Producer<T>::run()
+void Producer<T>::run(std::weak_ptr<std::queue<T> > bufferPtr)
 {
 	std::cout << "Producer<T>::run() called for id : " << this->_id << std::endl;
 	if (this->workerThread.joinable())
 	{
 		this->workerThread.join();
 	}
-	this->workerThread = std::thread(&Producer<T>::worker, this);
+	this->workerThread = std::thread(&Producer<T>::worker, this, bufferPtr);
 }
 
 template <typename T>
-void Producer<T>::worker()
+void Producer<T>::worker(std::weak_ptr<std::queue<T> > bufferPtr)
 {
 	std::cout << this->_id << " worker started" << std::endl;
 	while (!gStopSignalled)
 	{
 		std::cout << this->_id << " worker running" << std::endl;
+		if (auto dstBufferPtr = bufferPtr.lock())
+		{
+			std::cout << "dst buffer size = " << dstBufferPtr->size() << std::endl;
+		}
 	}
 	std::cout << this->_id << " worker finished" << std::endl;
 }

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <queue>
+#include <memory>
 
 #include "Producer.h"
 #include "Consumer.h"
@@ -14,7 +15,7 @@ private:
 	int _producerCount, _consumerCount;
 	std::vector<Producer<T> > 	producers;
 	std::vector<Consumer<T> > 	consumers;
-	std::queue<T> buffer;
+	std::shared_ptr<std::queue<T> > bufferPtr;
 public:
 	ProducerConsumerImpl(int, int);
 	~ProducerConsumerImpl();
@@ -23,6 +24,7 @@ public:
 
 template <typename T>
 ProducerConsumerImpl<T>::ProducerConsumerImpl(int consumerCount, int producerCount) :
+bufferPtr(new std::queue<T>()),
 _producerCount(producerCount),
 _consumerCount(consumerCount),
 producers(producerCount),
@@ -30,6 +32,7 @@ consumers(consumerCount)
 {
 	// TODO: Create consumers and producers respectively with given numbers
 	std::cout << "ProducerConsumerImpl ctor\n";
+	bufferPtr->push(7);	//add 1 elem to test
 }
 
 template <typename T>
@@ -50,13 +53,13 @@ void ProducerConsumerImpl<T>::run()
 	{
 		for (auto& producer : this->producers)
 		{
-			producer.run();
+			producer.run(bufferPtr);
 		}
 
 		//std::cout << "consumers.size() : " << consumers.size() << "\n";
 		for (auto& consumer : this->consumers)
 		{
-			consumer.run();
+			consumer.run(bufferPtr);
 		}
 	}
 }
